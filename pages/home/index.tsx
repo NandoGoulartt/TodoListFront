@@ -1,20 +1,9 @@
+import Header from "@/components/header";
+
 export default function Page() {
     return (
         <div className="min-h-screen flex flex-col">
-            <header className="w-full text-gray-700 bg-white shadow-sm body-font fixed top-0 z-10">
-                <div className="container flex items-start justify-between p-6 mx-auto flex-row">
-                    <a className="flex items-center mb-4 font-medium text-gray-900 title-font md:mb-0">
-                        <h1>TodoApp</h1>
-                    </a>
-
-                    <div className="items-center h-full pl-6 ml-6 border-l border-gray-200">
-                        <a href="#_"
-                            className="px-4 py-2 text-xs font-bold text-white uppercase transition-all duration-150 bg-red-400 rounded shadow outline-none active:bg-teal-600 hover:shadow-md focus:outline-none ease">
-                            Sair
-                        </a>
-                    </div>
-                </div>
-            </header>
+            <Header />
             <div className="flex-grow  mt-20">
                 <div className="bg-white p-8 rounded-md w-full">
                     <div className=" flex items-center justify-end pb-6">
