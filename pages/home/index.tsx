@@ -1,6 +1,6 @@
 import Header from "@/components/header";
 import { Dialog } from '@headlessui/react';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Page({ token }: { token: string }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -9,6 +9,30 @@ export default function Page({ token }: { token: string }) {
     const [deadline, setDeadline] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [tasks, setTasks] = useState([]);
+
+    useEffect(() => {
+        async function fetchTasks() {
+            try {
+                const response = await fetch('http://localhost:3001/tasks', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch tasks');
+                }
+
+                const tasksData = await response.json();
+                setTasks(tasksData);
+            } catch (error: any) {
+                setError(error.message);
+            }
+        }
+
+        fetchTasks();
+    }, []);
 
     const handleCreateTask = async () => {
         setIsLoading(true);
@@ -42,6 +66,14 @@ export default function Page({ token }: { token: string }) {
             setIsLoading(false);
         }
     };
+
+    const handleDeleteTask = async (task: { title: string, priority: string, prazo: string }) => {
+
+    }
+
+    const handleEditTask = async (task: { title: string, priority: string, prazo: string }) => {
+
+    }
     return (
         <div className="min-h-screen flex flex-col">
             <Header />
@@ -152,39 +184,44 @@ export default function Page({ token }: { token: string }) {
                                                 Prazo
                                             </th>
                                             <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                                Acoes
+
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <div className="flex items-center">
-                                                    <div className="flex-shrink-0 w-10 h-10">
-                                                        <img
-                                                            className="w-full h-full rounded-full"
-                                                            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
-                                                            alt=""
-                                                        />
+                                        {tasks.map((task: { title: string, priority: string, prazo: string }, index) => (
+                                            <tr key={index}>
+                                                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                    <div className="flex items-center">
+                                                        <div className="flex-shrink-0 w-10 h-10">
+                                                            {task.title}
+                                                        </div>
                                                     </div>
-                                                    <div className="ml-3">
-                                                        <p className="text-gray-900 whitespace-no-wrap">Vera Carpenter</p>
+                                                </td>
+                                                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                    <p className="text-gray-900 whitespace-no-wrap">{task.priority}</p>
+                                                </td>
+                                                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                    <p className="text-gray-900 whitespace-no-wrap">{new Date(task.prazo).toLocaleDateString('pt-BR')}</p>
+                                                </td>
+                                                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                    <div className="flex justify-around">
+                                                        <button
+                                                            onClick={() => handleEditTask(task)}
+                                                            className="text-indigo-600 hover:text-indigo-900 focus:outline-none"
+                                                        >
+                                                            Editar
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDeleteTask(task)}
+                                                            className="text-red-600 hover:text-red-900 focus:outline-none"
+                                                        >
+                                                            Deletar
+                                                        </button>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <p className="text-gray-900 whitespace-no-wrap">Admin</p>
-                                            </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <p className="text-gray-900 whitespace-no-wrap">Jan 21, 2020</p>
-                                            </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                                                    <span aria-hidden className="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                                                    <span className="relative">Activo</span>
-                                                </span>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
                             </div>
