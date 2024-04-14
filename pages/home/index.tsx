@@ -94,3 +94,19 @@ export default function Page() {
         </div>
     );
 }
+
+export async function getServerSideProps(context: any) {
+    const token = context.req.cookies.token;
+
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        };
+    }
+    return {
+        props: {},
+    };
+}
