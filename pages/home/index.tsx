@@ -67,8 +67,34 @@ export default function Page({ token }: { token: string }) {
         }
     };
 
-    const handleDeleteTask = async (task: { title: string, priority: string, prazo: string }) => {
+    const handleDeleteTask = async (task: { id: number, title: string, priority: string, prazo: string }) => {
 
+        const confirmed = window.confirm(`Tem certeza que deseja excluir a tarefa "${task.title}"?`);
+
+        if (confirmed) {
+            setIsLoading(true);
+            setError(null);
+
+            try {
+                const response = await fetch(`http://localhost:3001/tasks/${task.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to create task');
+                }
+
+
+            } catch (error: any) {
+                setError(error.message);
+            } finally {
+                setIsLoading(false);
+            }
+        }
     }
 
     const handleEditTask = async (task: { title: string, priority: string, prazo: string }) => {
@@ -189,7 +215,7 @@ export default function Page({ token }: { token: string }) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {tasks.map((task: { title: string, priority: string, prazo: string }, index) => (
+                                        {tasks.map((task: { id: number, title: string, priority: string, prazo: string }, index) => (
                                             <tr key={index}>
                                                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                     <div className="flex items-center">
