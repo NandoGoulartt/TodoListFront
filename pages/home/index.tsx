@@ -1,8 +1,10 @@
 import Header from "@/components/header";
 import { Dialog } from '@headlessui/react';
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Page({ token }: { token: string }) {
+    const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const [taskName, setTaskName] = useState('');
     const [priority, setPriority] = useState('');
@@ -97,9 +99,9 @@ export default function Page({ token }: { token: string }) {
         }
     }
 
-    const handleEditTask = async (task: { title: string, priority: string, prazo: string }) => {
-
-    }
+    const handleEditTask = async (task: { id: number, title: string, priority: string, prazo: string }) => {
+        router.push(`/edit/${task.id}`);
+      }
     return (
         <div className="min-h-screen flex flex-col">
             <Header />
