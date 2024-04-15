@@ -13,7 +13,7 @@ export default function Header() {
     return (
         <header className="w-full text-gray-700 bg-white shadow-sm body-font fixed top-0 z-10">
             <div className="container flex items-start justify-between p-6 mx-auto flex-row">
-                <a className="flex items-center mb-4 font-medium text-gray-900 title-font md:mb-0">
+                <a href='/home' className="flex items-center mb-4 font-medium text-gray-900 title-font md:mb-0">
                     <h1>TodoApp</h1>
                 </a>
 

@@ -18,7 +18,6 @@ export default function Home() {
       password: formData.get('password'),
     };
 
-    console.log(userData)
     try {
       const response = await fetch('http://localhost:3001/login', {
         method: 'POST',
