@@ -56,8 +56,8 @@ export default function Home() {
           <div className="mb-4">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
             <input type="password" id="password" name="password" className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter your password" required />
-            <a href="#"
-              className="text-xs text-gray-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Esqueci minha senha?</a>
+            <a href="/register"
+              className="text-xs text-gray-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Criar uma conta!</a>
           </div>
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-md mb-4">
