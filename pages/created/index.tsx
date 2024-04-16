@@ -18,7 +18,7 @@ export default function Page({ token }: { token: string }) {
         setError(null);
 
         try {
-            const response = await fetch('http://localhost:3001/tasks/create', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

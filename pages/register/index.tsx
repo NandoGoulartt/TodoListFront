@@ -21,7 +21,7 @@ export default function Page() {
         };
 
         try {
-            const response = await fetch('http://localhost:3001/users/create', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

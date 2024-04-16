@@ -9,7 +9,7 @@ export default function Page({ token }: { token: string }) {
     useEffect(() => {
         async function fetchTasks() {
             try {
-                const response = await fetch('http://localhost:3001/tasks', {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -36,7 +36,7 @@ export default function Page({ token }: { token: string }) {
         if (confirmed) {
 
             try {
-                const response = await fetch(`http://localhost:3001/tasks/${task.id}`, {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${task.id}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
