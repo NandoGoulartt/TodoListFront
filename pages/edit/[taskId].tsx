@@ -126,7 +126,7 @@ export default function EditTaskPage({ token }: { token: string }) {
                         />
                     </div>
                     <div className="flex justify-between">
-                        <a href="/" className="px-4 py-2 bg-gray-600 text-white rounded-md font-medium hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                        <a href="/home" className="px-4 py-2 bg-gray-600 text-white rounded-md font-medium hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">
                             Voltar
                         </a>
                         <div className="flex items-center">

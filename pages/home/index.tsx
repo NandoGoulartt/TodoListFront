@@ -48,7 +48,7 @@ export default function Page({ token }: { token: string }) {
                     throw new Error('Failed to create task');
                 }
 
-
+                window.location.reload();
             } catch (error: any) {
                 console.log(error)
             }
@@ -100,7 +100,7 @@ export default function Page({ token }: { token: string }) {
                                             <tr key={index}>
                                                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                     <div className="flex items-center">
-                                                        <div className="flex-shrink-0 w-10 h-10">
+                                                        <div className="flex-shrink-0 w-48 h-10">
                                                             {task.title}
                                                         </div>
                                                     </div>
@@ -115,13 +115,13 @@ export default function Page({ token }: { token: string }) {
                                                     <div className="flex justify-around">
                                                         <button
                                                             onClick={() => handleEditTask(task)}
-                                                            className="text-indigo-600 hover:text-indigo-900 focus:outline-none"
+                                                            className="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer"
                                                         >
                                                             Editar
                                                         </button>
                                                         <button
                                                             onClick={() => handleDeleteTask(task)}
-                                                            className="text-red-600 hover:text-red-900 focus:outline-none"
+                                                            className="bg-red-500 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer"
                                                         >
                                                             Deletar
                                                         </button>
