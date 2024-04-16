@@ -59,7 +59,7 @@ export default function Page({ token }: { token: string }) {
         router.push(`/edit/${task.id}`);
     }
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex bg-white flex-col p-6">
             <Header />
             <div className="flex-grow mt-20">
                 <div className="bg-white p-8  w-full">
