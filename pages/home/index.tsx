@@ -100,7 +100,7 @@ export default function Page({ token }: { token: string }) {
                                             <tr key={index}>
                                                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                     <div className="flex items-center">
-                                                        <div className="flex-shrink-0 w-48 h-10">
+                                                        <div className="flex-shrink-0 w-48">
                                                             {task.title}
                                                         </div>
                                                     </div>
