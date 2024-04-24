@@ -1,75 +1,143 @@
-import { useState } from 'react';
-import Cookies from 'js-cookie';
+import Header from "@/components/header";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-export default function Home() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+export default function Home({ token }: { token: string }) {
+    const router = useRouter();
+    const [tasks, setTasks] = useState([]);
 
-  const handleSubmit = async (event: any) => {
-    event.preventDefault();
-    setLoading(true);
-    setError('');
+    useEffect(() => {
+        async function fetchTasks() {
+            try {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
 
-    const form = event.target;
-    const formData = new FormData(form);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch tasks');
+                }
 
-    const userData = {
-      email: formData.get('email'),
-      password: formData.get('password'),
-    };
+                const tasksData = await response.json();
+                setTasks(tasksData);
+            } catch (error: any) {
+                console.log(error)
+            }
+        }
 
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
+        fetchTasks();
+    }, []);
 
-      if (response.ok) {
-        const data = await response.json();
-        Cookies.set('token', data.token);
-        window.location.href = '/home';
-      } else {
-        const errorData = await response.json();
-        setError(errorData.message);
-      }
-    } catch (error) {
-      console.error('Erro ao fazer login:', error);
-      setError('Erro ao fazer login. Por favor, tente novamente mais tarde.');
-    } finally {
-      setLoading(false);
+    const handleDeleteTask = async (task: { id: number, title: string, priority: string, prazo: string }) => {
+
+        const confirmed = window.confirm(`Tem certeza que deseja excluir a tarefa "${task.title}"?`);
+
+        if (confirmed) {
+
+            try {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${task.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to create task');
+                }
+
+                window.location.reload();
+            } catch (error: any) {
+                console.log(error)
+            }
+        }
     }
-  };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
-      <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-4 dark:text-gray-200">Bem-vindo de volta!</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
-            <input type="email" id="email" name="email" className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="your@email.com" required />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
-            <input type="password" id="password" name="password" className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter your password" required />
-            <a href="/register"
-              className="text-xs text-gray-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Criar uma conta!</a>
-          </div>
-          {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-md mb-4">
-              {error}
+    const handleEditTask = async (task: { id: number, title: string, priority: string, prazo: string }) => {
+        router.push(`/edit/${task.id}`);
+    }
+    return (
+        <div className="min-h-screen flex bg-white flex-col p-6">
+            <Header />
+            <div className="flex-grow mt-20">
+                <div className="bg-white p-8  w-full">
+                    <div className="flex items-center justify-end pb-6">
+                        <div className="flex items-center justify-end">
+                            <div className="lg:ml-40 ml-10 space-x-8">
+                                <button
+                                    onClick={() => router.push(`/created`)}
+                                    className="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer"
+                                >
+                                    Create
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                            <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                                <table className="min-w-full leading-normal">
+                                    <thead>
+                                        <tr>
+                                            <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                Nome da atividade
+                                            </th>
+                                            <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                Etiqueta
+                                            </th>
+                                            <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                Prazo
+                                            </th>
+                                            <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {tasks.map((task: { id: number, title: string, priority: string, prazo: string }, index) => (
+                                            <tr key={index}>
+                                                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                    <div className="flex items-center">
+                                                        <div className="flex-shrink-0 w-48">
+                                                            {task.title}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                    <p className="text-gray-900 whitespace-no-wrap">{task.priority}</p>
+                                                </td>
+                                                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                    <p className="text-gray-900 whitespace-no-wrap">{new Date(task.prazo).toISOString().split('T')[0]}</p>
+                                                </td>
+                                                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                    <div className="flex justify-center gap-3">
+                                                        <button
+                                                            onClick={() => handleEditTask(task)}
+                                                            className="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer"
+                                                        >
+                                                            Editar
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDeleteTask(task)}
+                                                            className="bg-red-500 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer"
+                                                        >
+                                                            Deletar
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          )}
-          <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            {loading ? 'Carregando...' : 'Login'}
-          </button>
-        </form>
-      </div>
-    </div>
-  );
+        </div>
+    );
 }
 
 export async function getServerSideProps(context: any) {
