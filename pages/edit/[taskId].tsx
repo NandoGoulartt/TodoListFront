@@ -106,9 +106,9 @@ export default function EditTaskPage({ token }: { token: string }) {
                             required
                         >
                             <option value="">Selecione a prioridade</option>
-                            <option value="low">Baixa</option>
-                            <option value="medium">Média</option>
-                            <option value="high">Alta</option>
+                            <option value="Baixa">Baixa</option>
+                            <option value="Média">Média</option>
+                            <option value="Alta">Alta</option>
                         </select>
                     </div>
                     <div className="mb-4">

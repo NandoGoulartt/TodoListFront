@@ -54,5 +54,5 @@ export default function Page() {
                 <a href="/" className="text-xs text-gray-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Já tenho uma conta!</a>
             </Form>
         </Container>
-    );
+    )
 }
