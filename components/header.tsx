@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
+import Link from 'next/link';
 
 export default function Header() {
     const router = useRouter();
@@ -13,7 +14,9 @@ export default function Header() {
     return (
         <nav className="bg-blue-500 p-4 flex items-center justify-between">
             <div>
-                <h1 className="text-white text-xl font-semibold">Organiza Ai!</h1>
+                <Link href={'/'}>
+                    <h1 className="text-white text-xl font-semibold">Organiza Ai!</h1>
+                </Link>
             </div>
             <div className="flex items-center space-x-4">
                 <span className="text-white">Bem-vindo</span>
